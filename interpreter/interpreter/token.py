@@ -3,8 +3,10 @@ import typing
 
 class TokenType(Enum):
     INTEGER = auto()
+    FLOAT = auto()
     PLUS = auto()
     MINUS = auto()
+    DOT = auto()
     EOS = auto()
 
 class Token():
