@@ -30,7 +30,20 @@ class Lexer():
             elif self._current_char == '-':
                 self._forward()
                 return Token(TokenType.MINUS, char)
-
+            elif self._current_char == '*':
+                self._forward()
+                return Token(TokenType.MUL, char)
+            elif self._current_char == '/':
+                self._forward()
+                return Token(TokenType.DIV, char)
+            elif self._current_char == '(':
+                char = self._current_char
+                self._forward()
+                return Token(TokenType.LPAREN, char)
+            elif self._current_char == ')':
+                char = self._current_char
+                self._forward()
+                return Token(TokenType.RPAREN, char)
             raise LexerException(f"Undefined token: {char}")
         return Token(TokenType.EOS, None)
 
@@ -50,18 +63,7 @@ class Lexer():
         while self._current_char and self._current_char.isdigit():
             result.append(self._current_char)
             self._forward()
-
-        # if self._current_char == '.':
-        #     self._pos -= len(result)
-        #     self._current_char = self._text[self._pos]
-        #     return None
         return ''.join(result)
-
-    # def _float(self) -> str:
-    #     if self._current_char == '.':
-    #         pass
-    #     else:
-    #         raise LexerException(f"Invalid float: {self._current_char}")
 
     def init(self, text: str):
         self._text = text

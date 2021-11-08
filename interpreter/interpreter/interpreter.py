@@ -1,46 +1,34 @@
-from .token import TokenType, Token
-from .lexer import Lexer, LexerException
+
+from interpreter.token import TokenType
+from .node import Node, Number, BinOp
+
 
 class InterpreterException(Exception):
     pass
 
-class Interpreter():
+class Interpreter:
+    def interpret(self, tree: Node) -> float:
+        return self._visit(tree)
     
-    def __init__(self) -> None:
-        self._current_token: Token = None
-        self._lexer = Lexer()
-
-    def interpret(self, text: str) -> int:
-        self._lexer.init(text)
-        return self._expr()
-
-    def _expr(self) -> int:
-        self._current_token = self._lexer.next()
-        lhs = self._current_token
-        self._check_token_type(TokenType.INTEGER)
+    def _visit(self, node: Node) -> float:
+        if isinstance(node, Number):
+            return self._visit_number(node)
+        elif isinstance(node, BinOp):
+            return self._visit_bin_op(node)
         
-        op = self._current_token
+        raise InterpreterException(f"Invalid node: {node}")
+
+    def _visit_number(self, node: Number) -> float:
+        return float(node.token.value)
+
+    def _visit_bin_op(self, node: BinOp) -> float:
+        op = node.op
         if op.type_ == TokenType.PLUS:
-            self._check_token_type(TokenType.PLUS)
+            return self._visit(node.lhs) + self._visit(node.rhs) 
         elif op.type_ == TokenType.MINUS:
-            self._check_token_type(TokenType.MINUS)
-
-        rhs = self._current_token
-        self._check_token_type(TokenType.INTEGER)
-
-        if op.type_ == TokenType.PLUS:
-            return int(lhs.value) + int(rhs.value)
-        elif op.type_ == TokenType.MINUS:
-            return int(lhs.value) - int(rhs.value)
-        else:
-            raise InterpreterException(f"Undefined token: {op}")
-
-
-    def __call__(self, text: str) -> int:
-        return self.interpret(text)
-
-    def _check_token_type(self, type_: TokenType):
-        if self._current_token.type_ == type_:
-            self._current_token = self._lexer.next()
-        else:
-            raise InterpreterException(f"Invalid expression - expected token type: {type_}")
+            return self._visit(node.lhs) - self._visit(node.rhs) 
+        elif op.type_ == TokenType.MUL:
+            return self._visit(node.lhs) * self._visit(node.rhs) 
+        elif op.type_ == TokenType.DIV:
+            return self._visit(node.lhs) / self._visit(node.rhs) 
+        raise InterpreterException(f"Invalid node (bin_op): {node}")
