@@ -33,6 +33,8 @@ class Interpreter:
             return self._visit(node.lhs) * self._visit(node.rhs) 
         elif op.type_ == TokenType.DIV:
             return self._visit(node.lhs) / self._visit(node.rhs) 
+        elif op.type_ == TokenType.POW:
+            return self._visit(node.lhs) ** self._visit(node.rhs) 
         raise InterpreterException(f"Invalid node (bin_op): {node}")
 
     def _visit_unary_op(self, node: UnaryOp) -> float:

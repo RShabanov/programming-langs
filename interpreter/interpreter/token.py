@@ -8,6 +8,7 @@ class TokenType(Enum):
     MINUS = auto()
     MUL = auto()
     DIV = auto()
+    POW = auto()
     LPAREN = auto()
     RPAREN = auto()
     DOT = auto()

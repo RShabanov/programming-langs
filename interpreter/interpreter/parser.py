@@ -41,8 +41,18 @@ class Parser:
         else:
             raise ParserException(f"Invalid factor - {token.type_}")
 
-    def _term(self) -> Node:
+    def _pow(self) -> Node:
         result = self._factor()
+        ops = [TokenType.POW]
+        while self._current_token.type_ in ops:
+            token = self._current_token
+            if token.type_ == TokenType.POW:
+                self._check_token_type(TokenType.POW)
+            result = BinOp(result, token, self._factor())
+        return result
+
+    def _term(self) -> Node:
+        result = self._pow()
         ops = [TokenType.MUL, TokenType.DIV]
 
         while self._current_token.type_ in ops:
@@ -51,7 +61,7 @@ class Parser:
                 self._check_token_type(TokenType.MUL)
             else:
                 self._check_token_type(TokenType.DIV)
-            result = BinOp(result, token, self._factor())
+            result = BinOp(result, token, self._pow())
         return result
 
     def _expr(self) -> Node:

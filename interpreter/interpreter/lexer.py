@@ -36,6 +36,9 @@ class Lexer():
             elif self._current_char == '/':
                 self._forward()
                 return Token(TokenType.DIV, char)
+            elif self._current_char == '^':
+                self._forward()
+                return Token(TokenType.POW, char)
             elif self._current_char == '(':
                 char = self._current_char
                 self._forward()

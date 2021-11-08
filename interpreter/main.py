@@ -10,4 +10,5 @@ if __name__ == "__main__":
     print(inter.interpret(parser("1 * 2 + 3")))
     print(inter.interpret(parser("-1")))
     print(inter.interpret(parser("+1")))
+    print(inter.interpret(parser("(1 + 1)^3^2")))
 
