@@ -31,4 +31,7 @@ class UnaryOp(Node):
     def __init__(self, op: Token, node: Node) -> None:
         super().__init__()
         self.op = op
-        self.token = node
+        self.node = node
+
+    def __str__(self) -> str:
+        return f"{super().__str__()} {self.op.value}{self.node}"

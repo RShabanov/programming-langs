@@ -9,7 +9,5 @@ if __name__ == "__main__":
     print(inter.interpret(parser("1 * (2 + 3)")))
     print(inter.interpret(parser("1 * 2 + 3")))
     print(inter.interpret(parser("-1")))
+    print(inter.interpret(parser("+1")))
 
-    # print(parser("2-7/2*3"))
-    # print(parser.parse("(2   + 4) - ((4 + 2))*3"))
-    # print(parser.parse("2- 4"))

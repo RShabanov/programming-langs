@@ -1,6 +1,6 @@
 from .token import TokenType, Token
 from .lexer import Lexer, LexerException
-from .node import Node, Number, BinOp
+from .node import Node, Number, BinOp, UnaryOp
 
 class ParserException(Exception):
     pass
@@ -31,15 +31,13 @@ class Parser:
             self._check_token_type(TokenType.RPAREN)
             return result
         # unary minus
-        # elif token.type_ == TokenType.MINUS:
-        #     self._check_token_type(TokenType.MINUS)
-        #     val = self._factor()
-        #     return Number(-val)
+        elif token.type_ == TokenType.MINUS:
+            self._check_token_type(TokenType.MINUS)
+            return UnaryOp(token, self._factor())
         # # unary plus
-        # elif token.type_ == TokenType.PLUS:
-        #     self._check_token_type(TokenType.PLUS)
-        #     val = self._factor()
-        #     return Number(val)
+        elif token.type_ == TokenType.PLUS:
+            self._check_token_type(TokenType.PLUS)
+            return UnaryOp(token, self._factor())
         else:
             raise ParserException(f"Invalid factor - {token.type_}")
 
