@@ -25,6 +25,9 @@ class Parser:
         if token.type_ == TokenType.INTEGER:
             self._check_token_type(TokenType.INTEGER)
             return Number(token)
+        if token.type_ == TokenType.FLOAT:
+            self._check_token_type(TokenType.FLOAT)
+            return Number(token)
         elif token.type_ == TokenType.LPAREN:
             self._check_token_type(TokenType.LPAREN)
             result = self._expr()

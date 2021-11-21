@@ -19,11 +19,11 @@ class Lexer():
             char = self._current_char
          
             if self._current_char.isdigit():
-                number = self._integer()
-                if number is not None:
-                    return Token(TokenType.INTEGER, number)
+                number = self._float()
+                if '.' in number:
+                    return Token(TokenType.FLOAT, number)
                 else:
-                    return Token(TokenType.FLOAT, self._float())
+                    return Token(TokenType.INTEGER, number)
             elif self._current_char == '+':
                 self._forward()
                 return Token(TokenType.PLUS, char)
@@ -67,7 +67,15 @@ class Lexer():
             result.append(self._current_char)
             self._forward()
         return ''.join(result)
-
+    
+    def _float(self) -> str:
+        lhs_part = self._integer()
+        if self._current_char == '.':
+            self._forward()
+            rhs_part = self._integer()
+            return f"{lhs_part}.{rhs_part}"
+        return lhs_part
+    
     def init(self, text: str):
         self._text = text
         self._pos = -1
