@@ -115,4 +115,12 @@ mod tests {
         token = lexer.next();
         assert_eq!(rhs, token);
     }
+
+    #[test]
+    fn tokenize_empty_str() {
+        let mut lexer = Lexer::from("");
+        let empty_token = Token::new(TokenType::Eos, None);
+        
+        assert_eq!(empty_token, lexer.next());
+    }
 }
