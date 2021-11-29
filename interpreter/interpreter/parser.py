@@ -37,7 +37,7 @@ class Parser:
         elif token.type_ == TokenType.MINUS:
             self._check_token_type(TokenType.MINUS)
             return UnaryOp(token, self._factor())
-        # # unary plus
+        # unary plus
         elif token.type_ == TokenType.PLUS:
             self._check_token_type(TokenType.PLUS)
             return UnaryOp(token, self._factor())
@@ -49,8 +49,7 @@ class Parser:
         ops = [TokenType.POW]
         while self._current_token.type_ in ops:
             token = self._current_token
-            if token.type_ == TokenType.POW:
-                self._check_token_type(TokenType.POW)
+            self._check_token_type(token.type_)
             result = BinOp(result, token, self._factor())
         return result
 
@@ -60,10 +59,7 @@ class Parser:
 
         while self._current_token.type_ in ops:
             token = self._current_token
-            if token.type_ == TokenType.MUL:
-                self._check_token_type(TokenType.MUL)
-            else:
-                self._check_token_type(TokenType.DIV)
+            self._check_token_type(token.type_)
             result = BinOp(result, token, self._pow())
         return result
 
@@ -73,15 +69,11 @@ class Parser:
 
         while self._current_token.type_ in ops:
             token = self._current_token
-            if token.type_ == TokenType.PLUS:
-                self._check_token_type(TokenType.PLUS)
-            else:
-                self._check_token_type(TokenType.MINUS)              
+            self._check_token_type(token.type_)
             result = BinOp(result, token, self._term())
         return result
 
     def _check_token_type(self, type_: TokenType):
-        # print(f"Token type: {type_}")
         if self._current_token.type_ == type_:
             self._current_token = self._lexer.next()
         else:
