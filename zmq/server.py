@@ -29,51 +29,31 @@
 #     socket.send(volt.encode())
 #     time.sleep(1)
 
-import numpy as np
-import matplotlib.pyplot as plt
 import zmq
-from skimage import draw
 import time
+import images_gen as ig
 
-def gen2d():
-    x, y = np.mgrid[0:1:400j, 0:1:400j]
-    f1 = np.random.randint(2, 10)
-    f2 = np.random.randint(2, 10)
-    return x*(1-x)*np.cos(f1*np.pi*x)*np.sin(f2*np.pi*y**2)**2
+# imgs = gen3d()
 
-def gen3d():
-    imgs = []
-    for _ in range(10):
-        img = gen2d()
+# t = time.perf_counter()
+# filtered = median_filter(imgs[0])
+# print(f"Elapse: {time.perf_counter() - t} s")
 
-        for _ in range(10):
-            padding = 5
-            x1, y1, x2, y2 = np.random.randint(padding, img.shape[0] - padding, size=4)
+# plt.subplot(121)
+# plt.imshow(imgs[0])
+# plt.subplot(122)
+# plt.imshow(filtered)
+# plt.show()
 
-            rr, cc = draw.line(x1, y1, x2, y2)
-            img[rr, cc] = img.max() * 0.95
+if __name__ == "__main__":
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.bind("tcp://*:6556")
 
-        imgs.append(img)
-    return imgs
-
-def median_filter(img):
-    result = img.copy()
-
-    padding = 3
-    for i in range(padding, img.shape[0] - padding):
-        for j in range(padding, img.shape[0] - padding):
-            sub = img[i-padding: i+padding+1, j-padding:j+padding+1]
-            result[i, j] = np.median(sub)
-    return result
-
-imgs = gen3d()
-
-t = time.perf_counter()
-filtered = median_filter(imgs[0])
-print(f"Elapse: {time.perf_counter() - t} s")
-
-plt.subplot(121)
-plt.imshow(imgs[0])
-plt.subplot(122)
-plt.imshow(filtered)
-plt.show()
+    c = 0
+    while True:
+        imgs = ig.gen3d()
+        socket.send_pyobj(imgs)
+        print(f"Sent images #{c}")
+        time.sleep(1)
+        c += 1
