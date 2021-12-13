@@ -12,4 +12,6 @@ if __name__ == "__main__":
     print(inter.interpret(parser("-1")))
     print(inter.interpret(parser("+1")))
     print(inter.interpret(parser("-(1 + 1)^3^2")))
+    print(inter.interpret(parser("2*3^3")))
     print(inter.interpret(parser("-1.5^2")))
+    # print(inter.interpret(parser(""))) # crashes it all
